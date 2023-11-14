@@ -54,7 +54,7 @@ install() {
 
     download_url="https://github.com/sass/dart-sass/releases/download/${version}/${filename}"
 
-    local tmp_download_dir=$(mktemp -d -t dart_sass_tmp_XXXXXX)
+    local tmp_download_dir="$(mktemp -d -t dart_sass_tmp_XXXXXX)"
     local source_path="${tmp_download_dir}/${filename}"
     local destination_path="${tmp_download_dir}/dist"
 
@@ -62,16 +62,23 @@ install() {
         cd "$tmp_download_dir"
         curl --silent --location --output "$source_path" -C - "$download_url" || fail "Could not download dart-sass installer for $version"
         mkdir -p "$destination_path"
-        tar xz -C "$filename" || fail "Could not extract $filename"
+        tar -zxf ${source_path} --strip-components 1 -C ${destination_path} || fail "Could not extract $filename"
         rm -f "$filename"
 
         mkdir -p "$install_path"
-        if [ -f "$install_path/clojure-dart-sass" ]; then
-            echo "Moving $install_path/clojure-dart-sass to $install_path/clojure-dart-sass.old"
-            mv -f "$install_path/clojure-dart-sass" "$install_path/clojure-dart-sass.old"
+        if [ -f "$install_path/sass" ]; then
+            echo "Moving $install_path/sass to $install_path/sass.old"
+            mv -f "$install_path/sass" "$install_path/sass.old"
         fi
-        mv -f "$tmp_download_dir/clojure-dart-sass" "$install_path/clojure-dart-sass"
-        chmod +x "$install_path/clojure-dart-sass"
+        mv -f "$destination_path/sass" "$install_path/sass"
+        chmod +x "$install_path/sass"
+
+        ln -s ${install_path}/sass /usr/local/bin/sass
+        if is_macos; then
+            mkdir -p /usr/local/bin/src/
+            ln -s ${destination_path}/src/dart /usr/local/bin/src/dart
+            ln -s ${destination_path}/src/sass.snapshot /usr/local/bin/src/sass.snapshot
+        fi
 
     ) || (
         rm -rf "$install_path"
