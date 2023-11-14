@@ -46,11 +46,11 @@ install() {
         ;;
     esac
 
-    download_url="https://github.com/sass/dart-sass/releases/download/${version}/dart-sass-${version}-${platform}-x64.tar.gz"
-    local untar_path=/tmp/bootstrap/bin/
+    local filename="dart-sass-${version}-${platform}-x64.tar.gz"
 
-    local tmp_download_dir
-    tmp_download_dir=$(mktemp -d -t dart_sass_tmp_XXXXXX)
+    download_url="https://github.com/sass/dart-sass/releases/download/${version}/${filename}"
+
+    local tmp_download_dir=$(mktemp -d -t dart_sass_tmp_XXXXXX)
     local source_path="${tmp_download_dir}/${filename}"
     local destination_path="${tmp_download_dir}/dist"
 
@@ -68,7 +68,6 @@ install() {
         fi
         mv -f "$tmp_download_dir/clojure-dart-sass" "$install_path/clojure-dart-sass"
         chmod +x "$install_path/clojure-dart-sass"
-
 
     ) || (
         rm -rf "$install_path"
