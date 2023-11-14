@@ -47,7 +47,7 @@ install() {
     esac
 
     download_url="https://github.com/sass/dart-sass/releases/download/${version}/dart-sass-${version}-${platform}-x64.tar.gz"
-    local untar_path=/tmp/bootstrap/bin/${os}
+    local untar_path=/tmp/bootstrap/bin/
 
     local tmp_download_dir
     tmp_download_dir=$(mktemp -d -t dart_sass_tmp_XXXXXX)
