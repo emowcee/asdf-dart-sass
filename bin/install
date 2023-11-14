@@ -13,10 +13,6 @@ install() {
     local version=$2
     local install_path=$3
 
-    echo $install_type
-    echo $version
-    echo $install_path
-
     if [ "$install_type" != "version" ]; then
         fail "asdf-dart-sass supports release installs only"
     fi
@@ -73,9 +69,12 @@ install() {
         mv -f "$destination_path/sass" "$install_path/sass"
         chmod +x "$install_path/sass"
 
-        ln -s ${install_path}/sass /usr/local/bin/sass
-        if is_macos; then
+        rm -f /usr/local/bin/sass
+        ln -s ${install_path}/sass /usr/local/bin
+        if [[ $(uname -s) == *"Darwin"* ]]; then
             mkdir -p /usr/local/bin/src/
+            rm -f /usr/local/bin/src/dart
+            rm -f /usr/local/bin/src/sass.snapshot
             ln -s ${destination_path}/src/dart /usr/local/bin/src/dart
             ln -s ${destination_path}/src/sass.snapshot /usr/local/bin/src/sass.snapshot
         fi
@@ -89,3 +88,4 @@ install() {
 }
 
 install "$ASDF_INSTALL_TYPE" "$ASDF_INSTALL_VERSION" "$ASDF_INSTALL_PATH"
+
