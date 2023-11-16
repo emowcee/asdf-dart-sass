@@ -69,14 +69,14 @@ install() {
         mv -f "$destination_path/sass" "$install_path/sass"
         chmod +x "$install_path/sass"
 
-        rm -f /usr/local/bin/sass
-        ln -s ${install_path}/sass /usr/local/bin
+        sudo rm -f /usr/local/bin/sass
+        sudo ln -s ${install_path}/sass /usr/local/bin
         if [[ $(uname -s) == *"Darwin"* ]]; then
             mkdir -p /usr/local/bin/src/
-            rm -f /usr/local/bin/src/dart
-            rm -f /usr/local/bin/src/sass.snapshot
-            ln -s ${destination_path}/src/dart /usr/local/bin/src/dart
-            ln -s ${destination_path}/src/sass.snapshot /usr/local/bin/src/sass.snapshot
+            sudo rm -f /usr/local/bin/src/dart
+            sudo rm -f /usr/local/bin/src/sass.snapshot
+            sudo ln -s ${destination_path}/src/dart /usr/local/bin/src/dart
+            sudo ln -s ${destination_path}/src/sass.snapshot /usr/local/bin/src/sass.snapshot
         fi
 
     ) || (
